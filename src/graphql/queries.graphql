@@ -1,0 +1,61 @@
+# this is an auto generated file. This will be overwritten
+
+query GetPhoto($id: ID!) {
+  getPhoto(id: $id) {
+    id
+    url
+    description
+    tags {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+query ListPhotos(
+  $filter: ModelPhotoFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listPhotos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      url
+      description
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+
+query GetTag($id: ID!) {
+  getTag(id: $id) {
+    id
+    name
+    createdAt
+    updatedAt
+    photoTagsId
+    __typename
+  }
+}
+
+query ListTags($filter: ModelTagFilterInput, $limit: Int, $nextToken: String) {
+  listTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      createdAt
+      updatedAt
+      photoTagsId
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}

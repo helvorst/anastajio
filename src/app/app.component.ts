@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'anastajio-app';
+  title = 'Anastajio';
+  photoUrls = Array.from(Array(12)).map((x, i) => `assets/photos/photo${i+1}.JPG`);
 }

@@ -1,0 +1,97 @@
+# this is an auto generated file. This will be overwritten
+
+mutation CreatePhoto(
+  $input: CreatePhotoInput!
+  $condition: ModelPhotoConditionInput
+) {
+  createPhoto(input: $input, condition: $condition) {
+    id
+    url
+    description
+    tags {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation UpdatePhoto(
+  $input: UpdatePhotoInput!
+  $condition: ModelPhotoConditionInput
+) {
+  updatePhoto(input: $input, condition: $condition) {
+    id
+    url
+    description
+    tags {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation DeletePhoto(
+  $input: DeletePhotoInput!
+  $condition: ModelPhotoConditionInput
+) {
+  deletePhoto(input: $input, condition: $condition) {
+    id
+    url
+    description
+    tags {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation CreateTag(
+  $input: CreateTagInput!
+  $condition: ModelTagConditionInput
+) {
+  createTag(input: $input, condition: $condition) {
+    id
+    name
+    createdAt
+    updatedAt
+    photoTagsId
+    __typename
+  }
+}
+
+mutation UpdateTag(
+  $input: UpdateTagInput!
+  $condition: ModelTagConditionInput
+) {
+  updateTag(input: $input, condition: $condition) {
+    id
+    name
+    createdAt
+    updatedAt
+    photoTagsId
+    __typename
+  }
+}
+
+mutation DeleteTag(
+  $input: DeleteTagInput!
+  $condition: ModelTagConditionInput
+) {
+  deleteTag(input: $input, condition: $condition) {
+    id
+    name
+    createdAt
+    updatedAt
+    photoTagsId
+    __typename
+  }
+}

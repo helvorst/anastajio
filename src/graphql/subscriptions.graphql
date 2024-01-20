@@ -1,0 +1,79 @@
+# this is an auto generated file. This will be overwritten
+
+subscription OnCreatePhoto($filter: ModelSubscriptionPhotoFilterInput) {
+  onCreatePhoto(filter: $filter) {
+    id
+    url
+    description
+    tags {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdatePhoto($filter: ModelSubscriptionPhotoFilterInput) {
+  onUpdatePhoto(filter: $filter) {
+    id
+    url
+    description
+    tags {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeletePhoto($filter: ModelSubscriptionPhotoFilterInput) {
+  onDeletePhoto(filter: $filter) {
+    id
+    url
+    description
+    tags {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateTag($filter: ModelSubscriptionTagFilterInput) {
+  onCreateTag(filter: $filter) {
+    id
+    name
+    createdAt
+    updatedAt
+    photoTagsId
+    __typename
+  }
+}
+
+subscription OnUpdateTag($filter: ModelSubscriptionTagFilterInput) {
+  onUpdateTag(filter: $filter) {
+    id
+    name
+    createdAt
+    updatedAt
+    photoTagsId
+    __typename
+  }
+}
+
+subscription OnDeleteTag($filter: ModelSubscriptionTagFilterInput) {
+  onDeleteTag(filter: $filter) {
+    id
+    name
+    createdAt
+    updatedAt
+    photoTagsId
+    __typename
+  }
+}
