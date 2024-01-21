@@ -1,11 +1,17 @@
-<div class="top-banner">
+<mat-toolbar>
   <h1 class="header">
     Anastajio
   </h1>
+  <span class="spacer"></span>
+  <div class="navigation">
+    <a routerLink="/about">About</a>
+    <a routerLink="/portfolio">Portfolio</a>
+  </div>
+</mat-toolbar>
+
+
+<div class="content" role="main">
+  <router-outlet></router-outlet>
 </div>
 
-<div class="images-container">
-  <div class="image-container" *ngFor="let url of photoUrls"  >
-    <img  [src]="url">
-  </div>
-</div>
+

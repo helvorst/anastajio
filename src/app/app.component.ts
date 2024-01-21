@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Anastajio';
-  photoUrls = Array.from(Array(12)).map((x, i) => `assets/photos/photo${i+1}.JPG`);
 }

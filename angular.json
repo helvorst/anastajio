@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "anastajio-app:build:production"
+              "buildTarget": "anastajio-app:build:production"
             },
             "development": {
-              "browserTarget": "anastajio-app:build:development"
+              "buildTarget": "anastajio-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "anastajio-app:build"
+            "buildTarget": "anastajio-app:build"
           }
         },
         "test": {
