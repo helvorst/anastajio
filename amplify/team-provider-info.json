@@ -23,6 +23,9 @@
           "appId": "d3anrbffhe1r0b",
           "type": "manual"
         }
+      },
+      "storage": {
+        "imageStore": {}
       }
     }
   }

@@ -1,11 +1,18 @@
-.mat-toolbar-row, .mat-toolbar-single-row {
-  height: 110px;
-  padding: 2em 3em 2em 3em;
+:host {
+    flex-grow: 1; /* Allows app-root to take up available space */
+    display: flex; /* If app-root also contains flex items */
+    flex-direction: column;
+}
 
+.mat-toolbar-row, .mat-toolbar-single-row {
+  height: 10rem;
+  padding: 5rem 4rem 6rem 5rem;
+  color: #e30b5d;
+  background: transparent;
 
   .header {
-    font-family: 'Roboto', cursive;
-    font-size: 60px;
+    font-size: 4rem;
+    font-family: "Hachi Maru Pop", cursive;
   }
 
   .spacer {
@@ -19,3 +26,7 @@
   }
 }
 
+.footer {
+  padding: 2rem;
+  text-align: center;
+}

@@ -1,19 +1,23 @@
-.pictures {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.page-content {
+  padding: 1rem;
+  background: teal;
+  border-radius: 45px;
 
-  //display: grid;
-  //gap: 10px;
-  //grid-template-columns: repeat(3, minmax(300px, 1fr));
-  //grid-template-rows: masonry;
+  .pictures {
+    width: 60rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: 500px;
+    gap: 0.5rem;
 
-  .picture {
-    max-height: 300px;
-    margin: 0.3em 0.3em 0 0.3em;
+    .picture {
+      border-radius: 10px;
 
-    img {
-      object-fit: contain;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
   }
 }

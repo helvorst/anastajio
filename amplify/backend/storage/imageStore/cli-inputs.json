@@ -1,0 +1,14 @@
+{
+  "resourceName": "imageStore",
+  "policyUUID": "2cd5582e",
+  "bucketName": "anastajioapp5159a7fc67d146288e3ff5e6a1759a93",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
