@@ -1,8 +1,10 @@
-<div class="page-content">
+<div class="container">
 
   @if(loading$ | async) {
-    <div>Одну секунду...</div>
-    <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+    <div class="loading">
+      <div>Одну секунду...</div>
+      <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+    </div>
   }
 
   @for(folderMeta of folderMetas$ | async; track folderMeta.path) {
@@ -17,19 +19,24 @@
         </div>
       }
 
-      <div>
-        {{ folderMeta.metadata.description }}
-      </div>
+      @if(folderMeta.metadata.description) {
+        <div>
+          {{ folderMeta.metadata.description }}
+        </div>
+      }
 
-      <div class="keywords">
-        @for(keyword of folderMeta.metadata.keywords; track keyword) {
-          <div class="keyword">{{ keyword }}</div>
-        }
-      </div>
+      @let keywords = folderMeta.metadata.keywords || [];
+      @if(keywords.length > 0) {
+        <div class="keywords">
+          @for(keyword of keywords; track keyword) {
+            <div class="keyword">{{ keyword }}</div>
+          }
+        </div>
+      }
 
-      <div class="pictures">
+      <div class="masonry">
         @for(image of shownImages; track image.path) {
-          <div class="picture" (click)="openImage(image.url)">
+          <div class="masonry-item" (click)="openImage(image.url)">
             <img [src]="image.url" loading="lazy" >
           </div>
         }
@@ -43,15 +50,15 @@
           </button>
         </div>
       } @else  {
-      Это все {{ allImages.length }} фото сделаных с ❤️
-    }
+        Это все {{ allImages.length }} фото сделаных с ❤️
+      }
 
+    @if(folderMeta.metadata.createdAt) {
       <div class="signature">
-        Настя и 🐈‍⬛ @ {{ folderMeta.metadata.createdAt }}
+        @ {{ folderMeta.metadata.createdAt }}
       </div>
+    }
 
     </div>
   }
-
-
 </div>

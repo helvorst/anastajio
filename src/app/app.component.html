@@ -1,8 +1,7 @@
 <mat-toolbar>
-  <h1 class="header">
+  <div class="header">
     Anastajio
-  </h1>
-  <span class="spacer"></span>
+  </div>
   <div class="navigation">
     <a routerLink="/about">Обо мне</a>
     <a routerLink="/portfolio">Мои фото</a>
@@ -13,7 +12,33 @@
   <router-outlet></router-outlet>
 </div>
 <div class="footer">
-  <p>
+  <div class="contacts-container">
+    <div>Напишите мне</div>
+    <div class="social-links">
+      <a href="https://vk.com/anastajio" target="_blank">
+        <img ngSrc="../assets/app/64px-VK.com-logo.svg.png"
+             width="36"
+             height="36"
+             alt="Напишите мне во ВКонтакте"/>
+      </a>
+
+      <a href="https://t.me/PhotoAnastajio" target="_blank">
+        <img ngSrc="../assets/app/64px-Telegram_logo.svg.png"
+             width="36"
+             height="36"
+             alt="Напишите мне во Телеграм"/>
+      </a>
+
+      <a href="mailto:anastajio3@gmail.com" target="_blank">
+        <img ngSrc="../assets/app/64px-Gmail_icon_(2020).svg.png"
+             width="28"
+             height="28"
+             alt="Напишите мне email"/>
+      </a>
+    </div>
+  </div>
+
+  <div class="made-by-container">
     made with ❤️ in sf
-  </p>
+  </div>
 </div>

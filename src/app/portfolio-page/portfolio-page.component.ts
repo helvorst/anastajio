@@ -9,7 +9,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 
-const DEFAIULT_SHOWN_IMAGES_INDEX=5;
+const DEFAIULT_SHOWN_IMAGES_INDEX=9;
 const DEFAIULT_LOAD_MORE_SIZE=12;
 
 @Component({

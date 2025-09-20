@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {CommonModule} from "@angular/common";
+import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {RouterModule} from "@angular/router";
 
@@ -11,6 +11,7 @@ import {RouterModule} from "@angular/router";
     CommonModule,
     MatToolbarModule,
     RouterModule,
+    NgOptimizedImage
   ],
   standalone: true,
 })
