@@ -1,5 +1,10 @@
 <div class="page-content">
 
+  @if(loading$ | async) {
+    <div>Одну секунду...</div>
+    <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+  }
+
   @for(folderMeta of folderMetas$ | async; track folderMeta.path) {
     <div class="folder">
       @let allImages = folderMeta.images || [];
@@ -25,7 +30,7 @@
       <div class="pictures">
         @for(image of shownImages; track image.path) {
           <div class="picture" (click)="openImage(image.url)">
-            <img [src]="image.url">
+            <img [src]="image.url" loading="lazy" >
           </div>
         }
       </div>

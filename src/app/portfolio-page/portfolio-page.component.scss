@@ -52,3 +52,35 @@
     font-size: 0.8em;
   }
 }
+
+.masonry {
+  column-count: 1;
+  column-gap: 12px;
+
+  @media (min-width: 640px) { column-count: 2; }
+  @media (min-width: 1024px) { column-count: 3; }
+  @media (min-width: 1440px) { column-count: 4; }
+}
+
+.masonry-item {
+  display: inline-block;         /* key for column layout */
+  width: 100%;
+  margin: 0 0 12px;
+  break-inside: avoid;           /* prevent item split */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+
+.masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;                  /* keep natural height */
+  object-fit: cover;
+  transition: transform .25s ease, filter .25s ease;
+}
+
+.masonry-item:hover img {
+  transform: scale(1.02);
+  filter: saturate(1.05);
+}

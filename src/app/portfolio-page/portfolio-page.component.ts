@@ -2,12 +2,12 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, injec
 import {CommonModule} from "@angular/common";
 import {S3Service} from "../services/s3.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {shareReplay} from "rxjs";
+import {BehaviorSubject, shareReplay, tap} from "rxjs";
 import {MatButtonModule} from "@angular/material/button";
 import {ViewImage} from "../dialogs/view-image/view-image";
-import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 const DEFAIULT_SHOWN_IMAGES_INDEX=5;
 const DEFAIULT_LOAD_MORE_SIZE=12;
@@ -16,7 +16,7 @@ const DEFAIULT_LOAD_MORE_SIZE=12;
   selector: 'app-portfolio-page',
   standalone: true,
   imports: [
-   CommonModule, MatButtonModule, MatDialogModule
+   CommonModule, MatButtonModule, MatProgressBarModule
   ],
   templateUrl: './portfolio-page.component.html',
   styleUrl: './portfolio-page.component.scss',
@@ -26,16 +26,17 @@ export class PortfolioPageComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly s3Service = inject(S3Service);
   private readonly cdr = inject(ChangeDetectorRef);
-  private readonly dialog = inject(MatDialog);
   private overlay = inject(Overlay);
 
   private overlayRef?: OverlayRef;
+  readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly mapFolderKeyToShownImageIndex = new Map<string, number>();
   readonly DEFAIULT_SHOWN_IMAGES_INDEX = DEFAIULT_SHOWN_IMAGES_INDEX
 
   readonly folderMetas$ = this.s3Service.listFoldersWithMetadata()
     .pipe(
+      tap(() => this.loading$.next(false)),
       takeUntilDestroyed(this.destroyRef),
       shareReplay({refCount: true, bufferSize: 1})
     );
