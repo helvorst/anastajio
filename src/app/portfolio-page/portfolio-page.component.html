@@ -1,8 +1,52 @@
 <div class="page-content">
-  <div class="pictures">
-    <div class="picture"
-        *ngFor="let url of photoUrls; index as i">
-      <img class="picture" [src]="url" >
+
+  @for(folderMeta of folderMetas$ | async; track folderMeta.path) {
+    <div class="folder">
+      @let allImages = folderMeta.images || [];
+      @let showUpToIndex = mapFolderKeyToShownImageIndex.get(folderMeta.path) || DEFAIULT_SHOWN_IMAGES_INDEX;
+      @let shownImages = allImages.slice(0, showUpToIndex);
+
+      @if(folderMeta.metadata.camera; as camera) {
+        <div>
+          📷 {{ camera }}
+        </div>
+      }
+
+      <div>
+        {{ folderMeta.metadata.description }}
+      </div>
+
+      <div class="keywords">
+        @for(keyword of folderMeta.metadata.keywords; track keyword) {
+          <div class="keyword">{{ keyword }}</div>
+        }
+      </div>
+
+      <div class="pictures">
+        @for(image of shownImages; track image.path) {
+          <div class="picture">
+            <img [src]="image.url" >
+          </div>
+        }
+      </div>
+
+      @if(shownImages.length < allImages.length && allImages.length > 0) {
+        <div>
+          <button mat-raised-button color="accent"
+                  (click)="showMore(folderMeta.path)">
+            Показать еще
+          </button>
+        </div>
+      } @else  {
+      Это все {{ allImages.length }} фото сделаных с ❤️
+    }
+
+      <div class="signature">
+        Настя и 🐈‍⬛ @ {{ folderMeta.metadata.createdAt }}
+      </div>
+
     </div>
-  </div>
+  }
+
+
 </div>
