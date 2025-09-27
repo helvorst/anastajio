@@ -6,39 +6,60 @@ const S3_FILE_PATH = 'photos/';
 
 export interface FolderMetadata {
   description: string;
-  createdAt: string,
+  createdAt: string, // Display date
   camera: string;
   keywords: string[];
+  dateForSorting: string;
 }
 
 export interface FolderWithMetadata {
-  path: string; // Subfolder path
   metadata: FolderMetadata; // From metadata.json, see example at anastajio-app/src/assets/app/metadata.json
   images: ImageItem[];
+  path: string;
 }
 
 export interface ImageItem {
   path: string;    // S3 key/path
   url: string;     // signed URL for display
-  lastModified?: Date;
-  size?: number;
+}
+
+export interface ListFilesFolderResult {
+  key: string;
+  metadataPath: string;
+  imagePaths: string[];
 }
 
 @Injectable({providedIn: 'root'})
 export class S3Service {
-  private listFolders() {
+  private getFoldersContent(): Observable<ListFilesFolderResult[]> {
     return from(
       list({ path: S3_FILE_PATH})).pipe(
       map(res => {
-        const sub = new Set<string>();
+        const metadataPaths = res.items.filter(i => i.path.endsWith('metadata.json'));
+        const map = new Map<string, ListFilesFolderResult>();
+        for (const metadataPath of metadataPaths) {
+          const key = metadataPath.path.substring(0, metadataPath.path.lastIndexOf('/'));
+          map.set(key, {
+            key,
+            metadataPath: metadataPath.path,
+            imagePaths: []
+          });
+        }
         for (const item of res.items) {
-          const remainder = item.path.replace(S3_FILE_PATH, '');
-          if(remainder) {
-            const slash = remainder.indexOf('/');
-            if (slash !== -1) sub.add(remainder.slice(0, slash + 1));
+          const key = item.path.substring(0, item.path.lastIndexOf('/'));
+          const isImage = /\.(jpe?g|png|webp|gif|avif|bmp|heic)$/i.test(item.path);
+          if (isImage) {
+            const existing = map.get(key);
+            if(!existing) {
+              console.warn(`Unexpected image ${item.path} in ${key}`);
+              continue;
+            } else {
+              existing.imagePaths.push(item.path);
+            }
           }
         }
-        return Array.from(sub);
+
+        return Array.from(map.values());
       }),
       catchError(e => {
         console.error('Failed to find', e);
@@ -48,9 +69,7 @@ export class S3Service {
   }
 
   /** Downloads and parses metadata.json for a single folder */
-  private fetchFolderMetadata(folder: string): Observable<FolderMetadata> {
-    const metaPath = `${S3_FILE_PATH}${folder}metadata.json`;
-
+  private fetchFolderMetadata(metaPath: string): Observable<FolderMetadata|null> {
     return from(downloadData({ path: metaPath}).result).pipe(
       // downloadData returns { body: ReadableStream | Blob | ... }
       switchMap(({ body }: any) => {
@@ -73,47 +92,21 @@ export class S3Service {
       }),
       map((text: string) => JSON.parse(text) as FolderMetadata),
       catchError(err => {
-        console.warn(`No/invalid metadata for ${folder}:`, err?.message || err);
+        console.warn(`No/invalid metadata for ${metaPath}:`, err?.message || err);
         return of(null);
       }),
-      filter(Boolean)
     );
   }
 
-  private fetchFolderImages(folder: string): Observable<ImageItem[]> {
-    const folderPath = `${S3_FILE_PATH}${folder}`;
+  private fetchFolderImagesSignedUrls(imagePaths: string[]): Observable<ImageItem[]> {
+    if (!imagePaths.length) return of([]);
 
-    return from(list({ path: folderPath })).pipe(
-      map(res => {
-        // Keep only files directly inside this folder (no deeper '/')
-        const files = res.items.filter(i => {
-          const remainder = i.path.replace(folderPath, '');
-          return remainder.length > 0 && !remainder.includes('/'); // direct child
-        });
-
-        // Filter to images and sort by lastModified desc
-        const images = files
-          .filter(i => /\.(jpe?g|png|webp|gif|avif|bmp|heic)$/i.test(i.path));
-          // .sort((a, b) => {
-          //   const ta = a.lastModified ? new Date(a.lastModified).getTime() : 0;
-          //   const tb = b.lastModified ? new Date(b.lastModified).getTime() : 0;
-          //   return tb - ta;
-          // });
-
-        return images;
-      }),
-      // Get signed URLs for display
-      switchMap(images => {
-        if (!images.length) return of([] as ImageItem[]);
-
-        return forkJoin(
-          images.map(img =>
-            from(getUrl({ path: img.path, options: { expiresIn: 3600 } })).pipe(
+    return forkJoin(
+          imagePaths.map(imgPath =>
+            from(getUrl({ path: imgPath, options: { expiresIn: 3600 } })).pipe(
               map(res => ({
-                path: img.path,
+                path: imgPath,
                 url: res.url.toString(),
-                lastModified: img.lastModified ? new Date(img.lastModified) : undefined,
-                size: img.size
               } satisfies ImageItem)),
               catchError(() =>
                 // If URL signing fails for one image, skip it
@@ -121,32 +114,31 @@ export class S3Service {
               )
             )
           )
-        ).pipe(map(arr => arr.filter(Boolean)));
-      }),
-      catchError(err => {
-        console.warn(`Failed to list images for ${folder}:`, err?.message || err);
-        return of([]); // tolerate per-folder failure
-      })
+        ).pipe(
+          catchError(err => {
+            console.warn(`Failed to list images`, err?.message || err);
+            return of([]); // tolerate per-folder failure
+          })
     );
   }
 
   /** List subfolders and attach their parsed metadata.json and image urls */
   listFoldersWithMetadata(): Observable<FolderWithMetadata[]> {
-    return this.listFolders().pipe(
-      switchMap(folders => {
-        if (!folders.length) return of([]);
+    return this.getFoldersContent().pipe(
+      switchMap(foldersContent => {
+        if (!foldersContent.length) return of([]);
 
         // For each folder, load metadata and images in parallel
-        const perFolder$ = folders.map(folder =>
+        const perFolder$ = foldersContent.map(foldersContent =>
           forkJoin({
-            metadata: this.fetchFolderMetadata(folder),
-            images: this.fetchFolderImages(folder)
+            metadata: this.fetchFolderMetadata(foldersContent.metadataPath),
+            images: this.fetchFolderImagesSignedUrls(foldersContent.imagePaths)
           }).pipe(
             map(({metadata, images}) => {
-              return {path: folder, metadata, images} as FolderWithMetadata;
+              return {metadata, images, path: foldersContent.key} as FolderWithMetadata;
             }),
             catchError(err => {
-              console.warn(`Failed to assemble folder ${folder}:`, err?.message || err);
+              console.warn(`Failed to assemble folder`, err?.message || err);
               return of(null);
             })
           )
@@ -154,7 +146,8 @@ export class S3Service {
 
         return forkJoin(perFolder$);
       }),
-      map(results => results.filter((x): x is FolderWithMetadata => !!x))
+      map(results => results.filter((x): x is FolderWithMetadata => !!x && !!x.metadata && x.images?.length > 0)
+          .sort((a, b) => (a.metadata.dateForSorting || '').localeCompare(b.metadata.dateForSorting || '')))
     );
   }
 

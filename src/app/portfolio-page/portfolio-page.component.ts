@@ -10,6 +10,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 const DEFAIULT_SHOWN_IMAGES_INDEX=9;
+const DEFAIULT_SHOWN_IMAGES_INDEX_MOBILE=5;
 const DEFAIULT_LOAD_MORE_SIZE=12;
 
 @Component({
@@ -32,7 +33,10 @@ export class PortfolioPageComponent {
   readonly loading$ = new BehaviorSubject<boolean>(true);
 
   readonly mapFolderKeyToShownImageIndex = new Map<string, number>();
-  readonly DEFAIULT_SHOWN_IMAGES_INDEX = DEFAIULT_SHOWN_IMAGES_INDEX
+
+  readonly isMobile = this.isMobileDevice();
+
+  readonly DEFAIULT_SHOWN_IMAGES_INDEX = this.isMobile ? DEFAIULT_SHOWN_IMAGES_INDEX_MOBILE : DEFAIULT_SHOWN_IMAGES_INDEX;
 
   readonly folderMetas$ = this.s3Service.listFoldersWithMetadata()
     .pipe(
@@ -61,5 +65,9 @@ export class PortfolioPageComponent {
     const compRef = this.overlayRef.attach(portal);
     compRef.instance.url = url;
     compRef.instance.close.subscribe(() => this.overlayRef?.dispose());
+  }
+
+  isMobileDevice(): boolean {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   }
 }
