@@ -7,6 +7,14 @@
     </div>
   }
 
+  <div class="keywords search">
+    @let tagFilter = tagFilter$ | async;
+    @for(tag of tags$ | async; track tag) {
+      <div class="keyword" [class.active]="tagFilter === tag.toLowerCase().split(DELIMITER)[0]"
+           (click)="setFilterKeyword(tag)">{{tag}}</div>
+    }
+  </div>
+
   @for(folderMeta of folderMetas$ | async; track folderMeta.path) {
     <div class="folder">
       @let allImages = folderMeta.images || [];
