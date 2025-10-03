@@ -40,7 +40,10 @@ export class PortfolioPageComponent {
 
   readonly DEFAIULT_SHOWN_IMAGES_INDEX = this.isMobile ? DEFAIULT_SHOWN_IMAGES_INDEX_MOBILE : DEFAIULT_SHOWN_IMAGES_INDEX;
 
-  private readonly foldersMetasOriginal$ = this.s3Service.listFoldersWithMetadata();
+  private readonly foldersMetasOriginal$ = this.s3Service.listFoldersWithMetadata().pipe(
+    takeUntilDestroyed(this.destroyRef),
+    shareReplay({refCount: true, bufferSize: 1})
+  );
 
   readonly tagFilter$ = new BehaviorSubject<string>('');
 
