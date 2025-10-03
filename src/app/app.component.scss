@@ -44,32 +44,26 @@
     align-items: end;
 
     @media (min-width: 1400px) {
-      grid-template-columns: auto auto;
+      grid-template-columns: auto auto auto;
       gap: 4em;
     }
 
-    //a {
-    //  margin-left: 1.5em;
-    //}
+    a {
+      cursor: pointer;
+    }
+
+    a.active {
+      text-decoration-line: underline;
+      text-decoration-style: wavy; /* makes it wavy */
+      text-decoration-color: #e30b5d;
+      text-underline-offset: 4px; /* move it slightly away from text */
+    }
   }
 }
 
 .footer {
   padding: 2rem;
   text-align: center;
-
-  .contacts-container {
-    display: grid;
-    gap: 1rem;
-    margin: 1em;
-
-    .social-links {
-      display: grid;
-      grid-template-columns: 36px 36px 36px;
-      gap: 1rem;
-      justify-content: center;
-    }
-  }
 
   .made-by-container {
     padding: 2rem;

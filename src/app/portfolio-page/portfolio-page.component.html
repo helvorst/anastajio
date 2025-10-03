@@ -56,6 +56,11 @@
     @if(folderMeta.metadata.createdAt) {
       <div class="signature">
         @ {{ folderMeta.metadata.createdAt }}
+
+        <a (click)="openContacts()" class="contacts-click" aria-label="Связаться со мной">
+          💌 Связаться
+        </a>
+
       </div>
     }
 

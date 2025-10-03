@@ -147,7 +147,7 @@ export class S3Service {
         return forkJoin(perFolder$);
       }),
       map(results => results.filter((x): x is FolderWithMetadata => !!x && !!x.metadata && x.images?.length > 0)
-          .sort((a, b) => (a.metadata.dateForSorting || '').localeCompare(b.metadata.dateForSorting || '')))
+          .sort((a, b) => (b.metadata.dateForSorting || '').localeCompare(a.metadata.dateForSorting || '')))
     );
   }
 

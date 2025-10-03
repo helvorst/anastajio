@@ -8,6 +8,7 @@ import {ViewImage} from "../dialogs/view-image/view-image";
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {Contactdialog} from "../dialogs/contactdialog/contactdialog";
 
 const DEFAIULT_SHOWN_IMAGES_INDEX=9;
 const DEFAIULT_SHOWN_IMAGES_INDEX_MOBILE=5;
@@ -28,7 +29,6 @@ export class PortfolioPageComponent {
   private readonly s3Service = inject(S3Service);
   private readonly cdr = inject(ChangeDetectorRef);
   private overlay = inject(Overlay);
-
   private overlayRef?: OverlayRef;
   readonly loading$ = new BehaviorSubject<boolean>(true);
 
@@ -69,5 +69,19 @@ export class PortfolioPageComponent {
 
   isMobileDevice(): boolean {
     return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
+
+  openContacts() {
+    this.overlayRef = this.overlay.create({
+      hasBackdrop: true,
+      backdropClass: 'dialog-backdrop',
+      positionStrategy: this.overlay.position().global().top('0').left('0'),
+      width: '100vw',
+      height: '100vh'
+    });
+
+    const portal = new ComponentPortal(Contactdialog);
+    const compRef = this.overlayRef.attach(portal);
+    compRef.instance.close.subscribe(() => this.overlayRef?.dispose());
   }
 }

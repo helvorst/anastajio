@@ -1,44 +1,22 @@
-<mat-toolbar>
-  <div class="header">
+<mat-toolbar  role="banner">
+  <header class="header" routerLink="/" aria-label="На главную">
     Anastajio
-  </div>
-  <div class="navigation">
-    <a routerLink="/about">Обо мне</a>
-    <a routerLink="/portfolio">Мои фото</a>
-  </div>
+  </header>
+  <nav class="navigation" aria-label="Главная навигация">
+    <a routerLink="/about" routerLinkActive="active" aria-current="page">Обо мне</a>
+    <a routerLink="/portfolio" routerLinkActive="active">Мои фото</a>
+    <a (click)="openContacts()">Связаться</a>
+  </nav>
 </mat-toolbar>
 
-<div class="content" role="main">
+<main class="content" role="main">
   <router-outlet></router-outlet>
-</div>
-<div class="footer">
-  <div class="contacts-container">
-    <div>Напишите мне</div>
-    <div class="social-links">
-      <a href="https://vk.com/anastajio" target="_blank">
-        <img ngSrc="../assets/app/64px-VK.com-logo.svg.png"
-             width="36"
-             height="36"
-             alt="Напишите мне во ВКонтакте"/>
-      </a>
+</main>
+<footer class="footer" id="footer">
 
-      <a href="https://t.me/PhotoAnastajio" target="_blank">
-        <img ngSrc="../assets/app/64px-Telegram_logo.svg.png"
-             width="36"
-             height="36"
-             alt="Напишите мне во Телеграм"/>
-      </a>
-
-      <a href="mailto:anastajio3@gmail.com" target="_blank">
-        <img ngSrc="../assets/app/64px-Gmail_icon_(2020).svg.png"
-             width="28"
-             height="28"
-             alt="Напишите мне email"/>
-      </a>
-    </div>
-  </div>
+  <app-contacts></app-contacts>
 
   <div class="made-by-container">
     made with ❤️ in sf
   </div>
-</div>
+</footer>

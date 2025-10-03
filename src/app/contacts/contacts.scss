@@ -1,0 +1,12 @@
+.contacts-container {
+  display: grid;
+  gap: 1rem;
+  margin: 1em;
+
+  .social-links {
+    display: grid;
+    grid-template-columns: 36px 36px 36px;
+    gap: 1rem;
+    justify-content: center;
+  }
+}
