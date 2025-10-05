@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /*?utm_
+
+# (optional but recommended)
+Disallow: /*?gclid=
+Disallow: /*?fbclid=
+Allow: /
+
+# If you have a sitemap:
+# Sitemap: https://www.your-domain.com/sitemap.xml
